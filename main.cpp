@@ -12,7 +12,7 @@ DigitalOut incorrectCodeLed(LED3);
 PwmOut buzzer(D9);
 UnbufferedSerial uartUsb(USBTX, USBRX, 115200);
 
-float potentiometerReading = 0.00f;   // Raw ADC input A1 value
+float potentiometerReading = 0.00f;
 
 DigitalOut keypadRow[4] = {PB_3, PB_5, PC_7, PA_15};
 DigitalIn keypadCol[4] = {PB_12, PB_13, PB_15, PC_6};

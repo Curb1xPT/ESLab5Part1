@@ -6,10 +6,13 @@ char correctCode[CODE_LENGTH] = {'1', '3', '5', '9'};
 char enterCode[CODE_LENGTH];
 int enterDigits = 0;
 
+AnalogIn potentiometer(A0);
 DigitalOut alarmLed(LED1);
 DigitalOut incorrectCodeLed(LED3);
 PwmOut buzzer(D9);
 UnbufferedSerial uartUsb(USBTX, USBRX, 115200);
+
+float potentiometerReading = 0.00f;   // Raw ADC input A1 value
 
 DigitalOut keypadRow[4] = {PB_3, PB_5, PC_7, PA_15};
 DigitalIn keypadCol[4] = {PB_12, PB_13, PB_15, PC_6};
@@ -81,11 +84,19 @@ int main() {
     inputsInit();
     outputsInit();
 
-    uartUsb.write("\nAlarm is on\r\n", 14);
+    uartUsb.write("\nSystem is on\r\n", 15);
 
-    bool alarmActivated = true;
+    bool alarmActivated = false;
 
     while (true) {
+
+        float potentiometerReading = potentiometer.read();
+
+        if (potentiometer.read() >=0.51f && !alarmActivated) {
+            alarmActivated = true;
+            uartUsb.write("\nAlarm activated - potentiometer value above 0.50\r\n", 52);
+            alarmLed = 1;
+        }
 
         char key = matrixKeypadUpdate();
 
